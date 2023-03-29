@@ -11,8 +11,12 @@ namespace GestorArchivos.Controllers
 {
     [Route("api/[controller]/")]
     [ApiController]
+
+    
     public class GestorController : ControllerBase
-    {
+    {   
+
+        
         private readonly GestorContext _context;
 
         public GestorController(GestorContext context)
