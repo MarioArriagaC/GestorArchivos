@@ -27,6 +27,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<GestorContext>(opt =>
     opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<UsuariosContext>(opt =>
+    opt.UseInMemoryDatabase("TodoListUsuarios"));
+
 //builder.Services.AddSwaggerGen(c =>
 //{
 //    c.SwaggerDoc("v1", new() { Title = "TodoApi", Version = "v1" });

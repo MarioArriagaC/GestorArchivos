@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GestorArchivo.Models;
 
+
 namespace GestorArchivos.Controllers
 {
     [Route("api/[controller]/")]
@@ -107,6 +108,110 @@ namespace GestorArchivos.Controllers
         private bool GestorItemExists(long id)
         {
             return _context.GestorItems.Any(e => e.Id == id);
+        }
+    }
+}
+
+namespace Usuarios.Controllers
+{
+    [Route("api/[controller]/")]
+    [ApiController]
+
+    
+    public class UsuariosController : ControllerBase
+    {   
+
+        
+        private readonly UsuariosContext _context;
+
+        public UsuariosController(UsuariosContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/Gestor
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<UsuariosItem>>> GetUsuariosItems()
+        {
+            return await _context.UsuariosItems.ToListAsync();
+        }
+
+        // GET: api/Gestor/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UsuariosItem>> GetUsuariosItem(long id)
+        {
+            var usuariosItem = await _context.UsuariosItems.FindAsync(id);  
+
+            if (usuariosItem == null)
+            {
+                return NotFound();
+            }
+
+            return usuariosItem;
+        }
+
+        // PUT: api/Gestor/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsuariosItem(long id, UsuariosItem usuariosItem)
+        {
+            if (id != usuariosItem.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(usuariosItem).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsuariosItemExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        // POST: api/Gestor
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<UsuariosItem>> PostTodoItem(UsuariosItem usuariosItem)
+        {
+            _context.UsuariosItems.Add(usuariosItem);
+            await _context.SaveChangesAsync();
+
+            //return CreatedAtAction("GetTodoItem", new { id = todoItem.Id }, todoItem);
+            return CreatedAtAction(nameof(GetUsuariosItem), new { id = usuariosItem.Id }, usuariosItem);
+        }
+
+        // DELETE: api/Gestor/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteUsuariosItem(long id)
+        {
+            var usuariosItem = await _context.UsuariosItems.FindAsync(id);
+            if (usuariosItem == null)
+            {
+                return NotFound();
+            }
+
+            _context.UsuariosItems.Remove(usuariosItem);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool UsuariosItemExists(long id)
+        {
+            return _context.UsuariosItems.Any(e => e.Id == id);
         }
     }
 }
